@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import PhotoButton from "@/components/home/PhotoButton";
 import AboutModal from "@/components/home/AboutModal";
 import Sketchbook from "@/components/home/Sketchbook";
@@ -162,7 +163,9 @@ export default function Home() {
       </section>
 
       {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
-      {workOpen && <WorkDrawer onClose={() => setWorkOpen(false)} />}
+      <AnimatePresence>
+        {workOpen && <WorkDrawer key="work-drawer" onClose={() => setWorkOpen(false)} />}
+      </AnimatePresence>
     </>
   );
 }

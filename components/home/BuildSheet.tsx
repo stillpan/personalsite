@@ -5,11 +5,11 @@ import { Project } from "@/data/projects";
 
 const categoryThumbnail: Record<string, string> = {
   "electrical-engineering":
-    "linear-gradient(135deg, #0E1A12 0%, #1A2E1A 50%, #0A1208 100%)",
+    "linear-gradient(135deg, #1C1A14 0%, #2E2A1E 50%, #141208 100%)",
   "product-design":
-    "linear-gradient(135deg, #1A1220 0%, #261830 50%, #10080E 100%)",
+    "linear-gradient(135deg, #2A1C0E 0%, #3D2A14 50%, #1C1008 100%)",
   artworks:
-    "linear-gradient(135deg, #201408 0%, #30200A 50%, #180E04 100%)",
+    "linear-gradient(135deg, #0E1620 0%, #182435 50%, #080E16 100%)",
 };
 
 const categoryLabel: Record<string, string> = {
@@ -57,7 +57,7 @@ export default function BuildSheet({ project, index, onSelect }: BuildSheetProps
         duration: 0.38,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className="flex flex-col cursor-pointer group"
+      className="flex flex-col cursor-pointer group overflow-hidden rounded"
       style={{ background: "#EEEAE4", border: "1px solid #C8BFB0" }}
       onClick={handleClick}
     >

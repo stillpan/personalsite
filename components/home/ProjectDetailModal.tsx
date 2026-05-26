@@ -28,59 +28,46 @@ export default function ProjectDetailModal({ project, origin, onClose }: Props) 
 
   return (
     <motion.div
-      className="absolute inset-0 z-10 overflow-hidden flex flex-col"
-      style={{
-        backgroundImage: "url('/images/backgrounds/metal.png')",
-        backgroundSize: "200%",
-        backgroundPosition: "center",
-        transformOrigin: `${origin.x * 100}% ${origin.y * 100}%`,
-      }}
+      className="fixed inset-0 z-[170] overflow-hidden flex flex-col"
+      style={{ background: "rgba(10, 6, 2, 0.50)", transformOrigin: `${origin.x * 100}% ${origin.y * 100}%` }}
       initial={{ scale: 0.08, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.45, ease: [0.2, 0, 0.2, 1] }}
+      onClick={(e) => e.stopPropagation()}
     >
-      {/* ── Header ── */}
-      <div
-        className="flex items-center justify-between px-8 py-5 shrink-0"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
-      >
-        <button
-          onClick={onClose}
-          className="font-[family-name:var(--font-space)] text-sm uppercase tracking-widest transition-colors"
-          style={{ color: "rgba(255,255,255,0.65)" }}
-          onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#E8272A")}
-          onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(255,255,255,0.65)")}
-        >
-          ← back
-        </button>
-        <span
-          className="font-[family-name:var(--font-bebas)] text-base tracking-widest"
-          style={{ color: "rgba(255,255,255,0.3)" }}
-        >
-          {String(index + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
-        </span>
-      </div>
-
       {/* ── Scrollable area with flanking arrows ── */}
       <div className="overflow-y-auto flex-1">
-        <div className="py-8 flex items-start gap-4 mx-auto px-4" style={{ maxWidth: "68rem" }}>
+        <div className="py-8 flex items-start gap-4 mx-auto px-4" style={{ maxWidth: "72rem" }}
+          onClick={(e) => e.stopPropagation()}
+        >
 
           {/* Left arrow */}
-          <div className="sticky top-8 shrink-0 flex items-center justify-center w-20 pt-24">
+          <div className="sticky top-8 shrink-0 flex items-center justify-center w-32 pt-24">
             <button
               onClick={prev}
-              className="font-[family-name:var(--font-bebas)] leading-none transition-all hover:scale-110"
-              style={{ fontSize: "5rem", color: "rgba(255,255,255,0.75)" }}
-              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#E8272A")}
-              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(255,255,255,0.75)")}
+              className="transition-all hover:scale-110 group"
               aria-label="Previous project"
             >
-              ←
+              <svg width="48" height="64" viewBox="0 0 48 64" fill="none">
+                <polyline points="36,8 12,32 36,56" stroke="rgba(255,255,255,0.75)" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"
+                  className="group-hover:stroke-[#E8272A] transition-colors" />
+              </svg>
             </button>
           </div>
 
           {/* Card with swipe animation */}
           <div className="flex-1 overflow-hidden">
+            {/* × close above card, right-aligned */}
+            <div className="flex justify-end pb-2">
+              <button
+                onClick={(e) => { e.stopPropagation(); onClose(); }}
+                className="font-[family-name:var(--font-space)] text-4xl leading-none transition-colors"
+                style={{ color: "rgba(255,255,255,0.7)" }}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#E8272A")}
+                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(255,255,255,0.7)")}
+                aria-label="Close"
+              >×</button>
+            </div>
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={current.slug}
@@ -223,16 +210,16 @@ export default function ProjectDetailModal({ project, origin, onClose }: Props) 
           </div>
 
           {/* Right arrow */}
-          <div className="sticky top-8 shrink-0 flex items-center justify-center w-20 pt-24">
+          <div className="sticky top-8 shrink-0 flex items-center justify-center w-32 pt-24">
             <button
               onClick={next}
-              className="font-[family-name:var(--font-bebas)] leading-none transition-all hover:scale-110"
-              style={{ fontSize: "5rem", color: "rgba(255,255,255,0.75)" }}
-              onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#E8272A")}
-              onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(255,255,255,0.75)")}
+              className="transition-all hover:scale-110 group"
               aria-label="Next project"
             >
-              →
+              <svg width="48" height="64" viewBox="0 0 48 64" fill="none">
+                <polyline points="12,8 36,32 12,56" stroke="rgba(255,255,255,0.75)" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"
+                  className="group-hover:stroke-[#E8272A] transition-colors" />
+              </svg>
             </button>
           </div>
 
