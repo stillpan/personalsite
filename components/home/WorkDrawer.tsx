@@ -1,0 +1,116 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { motion } from "framer-motion";
+import { projects, Project } from "@/data/projects";
+import BuildSheet, { CardOrigin } from "./BuildSheet";
+import ProjectDetailModal from "./ProjectDetailModal";
+
+interface Selected {
+  project: Project;
+  origin: CardOrigin;
+}
+
+export default function WorkDrawer({ onClose }: { onClose: () => void }) {
+  const [selected, setSelected] = useState<Selected | null>(null);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (selected) setSelected(null);
+        else onClose();
+      }
+    };
+    document.addEventListener("keydown", handleKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose, selected]);
+
+  return createPortal(
+    <>
+      {/* Backdrop */}
+      <motion.div
+        className="fixed inset-0 z-[150]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        style={{ background: "rgba(8, 6, 2, 0.72)" }}
+        onClick={onClose}
+      />
+
+      {/* Drawer */}
+      <motion.div
+        className="fixed bottom-0 left-0 right-0 z-[160] flex flex-col overflow-hidden"
+        style={{
+          height: "88vh",
+          backgroundImage: "url('/images/backgrounds/metal.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.55, ease: "linear" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Top bar */}
+        <div
+          className="flex items-center justify-between px-8 py-5 shrink-0"
+          style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
+        >
+          <div className="flex items-center gap-4">
+            <span
+              className="font-[family-name:var(--font-bebas)] text-2xl tracking-widest"
+              style={{ color: "rgba(255,255,255,0.85)" }}
+            >
+              BUILD ARCHIVE
+            </span>
+            <span
+              className="font-[family-name:var(--font-space)] text-sm"
+              style={{ color: "rgba(255,255,255,0.45)" }}
+            >
+              — {projects.length} projects
+            </span>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="font-[family-name:var(--font-space)] text-5xl leading-none transition-colors pb-1"
+            style={{ color: "rgba(255,255,255,0.75)" }}
+            onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#E8272A")}
+            onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(255,255,255,0.75)")}
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Scrollable build sheets */}
+        <div className="overflow-y-auto px-8 py-8 relative">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            {projects.map((project, i) => (
+              <BuildSheet
+                key={project.slug}
+                project={project}
+                index={i}
+                onSelect={(p, origin) => setSelected({ project: p, origin })}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Detail panel expands from card position */}
+        {selected && (
+          <ProjectDetailModal
+            project={selected.project}
+            origin={selected.origin}
+            onClose={() => setSelected(null)}
+          />
+        )}
+      </motion.div>
+    </>,
+    document.body
+  );
+}

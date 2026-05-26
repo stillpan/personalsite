@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-cream: #F7F4EF;
+  --color-ink: #0A0A0A;
+  --color-ink-muted: #555;
+  --color-red: #E8272A;
+  --color-border: #D8D2C8;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: #F7F4EF;
+  color: #0A0A0A;
+  font-family: var(--font-space, system-ui, sans-serif);
+}

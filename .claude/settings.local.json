@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/yukizhang/Downloads/**)",
+      "Read(//Users/yukizhang/Applications/**)",
+      "Bash(mdfind \"node\" -onlyin /usr/local)",
+      "Bash(/opt/homebrew/bin/brew --version)",
+      "Bash(/usr/local/bin/brew --version)"
+    ]
+  }
+}
