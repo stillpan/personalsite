@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { animate } from "framer-motion";
+import { animate, motion } from "framer-motion";
 
 const W = 720;
 const H = 420;
-const FOLD = 0.25; // seconds per half-flip
+const FOLD = 0.45;
 
 const ARTWORKS = [
   { title: "architecture · 2025", idx: 0 },
@@ -14,7 +14,7 @@ const ARTWORKS = [
   { title: "circuits & sensors",  idx: 3 },
 ];
 
-const TOTAL = ARTWORKS.length + 2; // cover + artworks + back cover
+const TOTAL = ARTWORKS.length + 2; // 0=cover, 1-4=artworks, 5=back
 
 function SketchSVG({ idx }: { idx: number }) {
   const art = [
@@ -60,7 +60,7 @@ function SketchSVG({ idx }: { idx: number }) {
   return <>{art[idx % art.length]}</>;
 }
 
-// ─── Page content components ───────────────────────────────────────────────────
+// ─── Page components ───────────────────────────────────────────────────────────
 
 function CoverPage({ onOpen }: { onOpen: () => void }) {
   return (
@@ -79,20 +79,37 @@ function CoverPage({ onOpen }: { onOpen: () => void }) {
   );
 }
 
-function ArtworkPage({ artIdx, title, onNext, onPrev }: {
-  artIdx: number; title: string; onNext: () => void; onPrev: () => void;
+function NotebookBack({ onFlipBack }: { onFlipBack: () => void }) {
+  return (
+    <div
+      className="absolute inset-0 cursor-pointer select-none"
+      style={{ background: "#E8E3DA", borderBottom: "1px solid #C8BFB0" }}
+      onClick={onFlipBack}
+    >
+      {[0,1,2,3,4,5,6,7].map(i => (
+        <div key={i} className="absolute left-0 right-0 h-px pointer-events-none"
+          style={{ top: `${40 + i * 46}px`, background: "#D4CEC6" }} />
+      ))}
+      <div className="absolute bottom-3 left-0 right-0 flex justify-center pointer-events-none">
+        <span className="font-[family-name:var(--font-space)] text-[8px] uppercase tracking-[0.3em]"
+          style={{ color: "rgba(10,10,10,0.15)" }}>click to go back</span>
+      </div>
+    </div>
+  );
+}
+
+function ArtworkPage({ artIdx, title, onBottom }: {
+  artIdx: number; title: string; onBottom: () => void;
 }) {
   return (
     <div className="absolute inset-0 select-none"
-      style={{ background: "#F0EBE3", border: "1px solid #C8BFB0" }}>
+      style={{ background: "#F0EBE3", borderTop: "1px solid #C8BFB0" }}>
       {[0,1,2,3,4,5,6,7].map(i => (
         <div key={i} className="absolute left-0 right-0 h-px pointer-events-none"
           style={{ top: `${52 + i * 44}px`, background: "#E4DFD8" }} />
       ))}
-      {/* Left half — click to go back */}
-      <div className="absolute inset-y-0 left-0 w-1/2 cursor-pointer z-10" onClick={onPrev} />
-      {/* Right half — click to go forward */}
-      <div className="absolute inset-y-0 right-0 w-1/2 cursor-pointer z-10" onClick={onNext} />
+      {/* Bottom half — click to go forward */}
+      <div className="absolute left-0 right-0 cursor-pointer z-10" style={{ bottom: 0, height: "50%" }} onClick={onBottom} />
       <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: "32px 56px" }}>
         <SketchSVG idx={artIdx} />
       </div>
@@ -107,7 +124,7 @@ function ArtworkPage({ artIdx, title, onNext, onPrev }: {
 function BackPage({ onReset }: { onReset: () => void }) {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center gap-7"
-      style={{ background: "linear-gradient(160deg, #1A0E04 0%, #2C1C0C 100%)" }}>
+      style={{ background: "linear-gradient(160deg, #1A0E04 0%, #2C1C0C 100%)", borderTop: "1px solid #3D2A14" }}>
       <div className="w-28 h-px" style={{ background: "rgba(255,255,255,0.10)" }} />
       <button
         onClick={onReset}
@@ -126,44 +143,37 @@ function BackPage({ onReset }: { onReset: () => void }) {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 export default function Sketchbook() {
-  const [pageIdx, setPageIdx] = useState(0); // 0=cover, 1-4=artworks, 5=back
+  const [pageIdx, setPageIdx] = useState(0);
   const [busy, setBusy] = useState(false);
-  const pageRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  const opts = (origin: string) =>
-    ({ duration: FOLD, transformOrigin: origin } as Parameters<typeof animate>[2]);
+  const isOpen = pageIdx > 0;
 
   async function flipTo(target: number) {
-    if (busy || !pageRef.current) return;
+    if (busy || !bottomRef.current) return;
     setBusy(true);
 
     const forward = target > pageIdx;
-    const origin = forward ? "50% 0%" : "50% 100%";
+    // Restore the original midAngle values that produced the good animation.
+    // transformOrigin is set via CSS style on the element (not via animate options,
+    // which framer-motion ignores for this property).
     const midAngle = forward ? -90 : 90;
 
-    // Phase 1 — fold page toward edge-on
-    await animate(pageRef.current, { rotateX: midAngle }, { ...opts(origin), ease: "easeIn" });
-
-    // Swap content while edge-on (invisible)
+    await animate(bottomRef.current, { rotateX: midAngle }, { duration: FOLD, ease: "easeIn" });
     setPageIdx(target);
-
-    // Jump to the mirror edge-on angle (other side of the flip)
-    animate(pageRef.current, { rotateX: -midAngle }, { duration: 0 });
-
-    // Phase 2 — unfold from opposite side back to flat
-    await animate(pageRef.current, { rotateX: 0 }, { ...opts(origin), ease: "easeOut" });
+    animate(bottomRef.current, { rotateX: -midAngle }, { duration: 0 });
+    await animate(bottomRef.current, { rotateX: 0 }, { duration: FOLD, ease: "easeOut" });
 
     setBusy(false);
   }
 
   function reset() {
-    if (!pageRef.current) return;
-    animate(pageRef.current, { rotateX: 0 }, { duration: 0 });
+    if (bottomRef.current) animate(bottomRef.current, { rotateX: 0 }, { duration: 0 });
     setPageIdx(0);
     setBusy(false);
   }
 
-  function renderPage() {
+  function renderBottom() {
     if (pageIdx === 0) return <CoverPage onOpen={() => flipTo(1)} />;
     if (pageIdx === TOTAL - 1) return <BackPage onReset={reset} />;
     const art = ARTWORKS[pageIdx - 1];
@@ -171,8 +181,7 @@ export default function Sketchbook() {
       <ArtworkPage
         artIdx={art.idx}
         title={art.title}
-        onNext={() => flipTo(pageIdx + 1)}
-        onPrev={() => flipTo(pageIdx - 1)}
+        onBottom={() => flipTo(pageIdx + 1)}
       />
     );
   }
@@ -182,15 +191,36 @@ export default function Sketchbook() {
       className="flex justify-center"
       onMouseEnter={() => { if (pageIdx === 0 && !busy) flipTo(1); }}
     >
-      {/* Perspective wrapper */}
-      <div style={{ width: W, height: H, perspective: "900px" }}>
-        <div
-          ref={pageRef}
-          className="relative w-full h-full"
-          style={{ transformOrigin: "50% 0%", transformStyle: "preserve-3d" }}
+      <div style={{ width: W, perspective: "900px" }}>
+
+        {/* Top page — animates its height smoothly so there's no layout jump */}
+        <motion.div
+          initial={{ height: 0 }}
+          animate={{ height: isOpen ? H : 0 }}
+          transition={{ duration: FOLD, ease: "easeOut" }}
+          style={{ overflow: "hidden", width: W }}
         >
-          {renderPage()}
+          <div className="relative" style={{ width: W, height: H }}>
+            <NotebookBack onFlipBack={() => { if (!busy && pageIdx > 0) flipTo(pageIdx - 1); }} />
+          </div>
+        </motion.div>
+
+        {/* Bottom page — the spine is its top edge, set via CSS transformOrigin */}
+        <div
+          ref={bottomRef}
+          className="relative"
+          style={{
+            width: W,
+            height: H,
+            // transformOrigin MUST be in the CSS style — framer-motion animate()
+            // ignores transformOrigin when passed as a transition option.
+            transformOrigin: "50% 0%",
+            transformStyle: "preserve-3d",
+          }}
+        >
+          {renderBottom()}
         </div>
+
       </div>
     </div>
   );

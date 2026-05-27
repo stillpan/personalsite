@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Space_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 const bebas = Bebas_Neue({
   variable: "--font-bebas",
@@ -17,6 +18,9 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Yuki Zhang",
   description: "Electrical engineer at Brown. Researcher at CERN.",
+  verification: {
+    google: "fviYdc15pwZ-lg8FWwevkQUuEzOGnvI-qR8KRVhZaAk",
+  },
 };
 
 export default function RootLayout({
@@ -31,6 +35,7 @@ export default function RootLayout({
     >
       <body className="bg-[#F7F4EF] text-[#0A0A0A]">
         {children}
+        <Analytics />
 
         {/* Email — pinned to bottom, every page */}
         <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-30">

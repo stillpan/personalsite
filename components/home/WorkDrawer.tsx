@@ -32,18 +32,36 @@ export default function WorkDrawer({ onClose }: { onClose: () => void }) {
 
   return createPortal(
     <>
-      {/* Backdrop — covers full screen, catches clicks above and beside the drawer */}
+      {/* Visual backdrop — dark overlay, pointer-events-none (purely visual) */}
       <motion.div
-        className="fixed inset-0 z-[150]"
+        className="fixed inset-0 z-[149] pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4, ease: "linear" }}
         style={{ background: "rgba(8, 6, 2, 0.72)" }}
+      />
+
+      {/* Top close zone — the ~12vh above the drawer */}
+      <div
+        className="fixed top-0 left-0 right-0 z-[150] cursor-pointer"
+        style={{ height: "12vh" }}
         onClick={onClose}
       />
 
-      {/* Drawer — full-width so metal image is unchanged */}
+      {/* Side close strips — outer 5vw on each side, sit above the drawer */}
+      <div
+        className="fixed bottom-0 left-0 z-[162] cursor-pointer"
+        style={{ width: "5vw", height: "88vh" }}
+        onClick={onClose}
+      />
+      <div
+        className="fixed bottom-0 right-0 z-[162] cursor-pointer"
+        style={{ width: "5vw", height: "88vh" }}
+        onClick={onClose}
+      />
+
+      {/* Drawer */}
       <motion.div
         className="fixed bottom-0 left-0 right-0 z-[160] flex flex-col overflow-hidden"
         style={{
@@ -57,12 +75,8 @@ export default function WorkDrawer({ onClose }: { onClose: () => void }) {
         exit={{ y: "100%" }}
         transition={{ duration: 0.55, ease: "linear" }}
       >
-        {/* Centered content wrapper — stops propagation so only clicks
-            on the metal background outside this wrapper close the drawer */}
-        <div
-          className="max-w-4xl w-full mx-auto flex flex-col flex-1"
-          onClick={(e) => e.stopPropagation()}
-        >
+        {/* Centered content wrapper */}
+        <div className="max-w-4xl w-full mx-auto flex flex-col flex-1 min-h-0">
           {/* Top bar */}
           <div
             className="flex items-center justify-between px-6 shrink-0"
@@ -96,7 +110,7 @@ export default function WorkDrawer({ onClose }: { onClose: () => void }) {
           </div>
 
           {/* Scrollable build sheets */}
-          <div className="overflow-y-auto px-6 py-8">
+          <div className="overflow-y-auto px-6 py-8 flex-1">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {projects.map((project, i) => (
                 <BuildSheet
@@ -111,7 +125,7 @@ export default function WorkDrawer({ onClose }: { onClose: () => void }) {
         </div>
       </motion.div>
 
-      {/* Detail modal — rendered here so it's outside the drawer's stacking context */}
+      {/* Detail modal — outside the drawer's stacking context */}
       {selected && (
         <ProjectDetailModal
           project={selected.project}

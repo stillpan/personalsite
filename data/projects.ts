@@ -34,63 +34,70 @@ export const projects: Project[] = [
   // ─── Most recent first ────────────────────────────────────────────────────
   {
     slug: "ppg-sensor-enclosure",
-    title: "PPG Sensor Wearable Enclosure",
+    title: "Wrist-Worn PPG Wearable Encapsulation",
     category: "product-design",
     tag: "Product Design · Medical",
-    period: "Jan 2026 – Present",
+    period: "Jan – May 2026",
     org: "PROBE Lab — ENGN 0620",
     summary:
-      "Redesigned a wearable enclosure for the PROBE Lab's equitable PPG sensor from bulky dual-enclosure to a compact watch-style form factor, improving signal acquisition speed by ~40%.",
+      "Redesigned a wearable enclosure for the PROBE Lab's equitable PPG sensor — folding the PCB to reduce surface area and iterating from sketches and cardboard prototypes through a dual-enclosure concept to a refined single-enclosure watch-style form factor, validated through clinical pressure testing.",
     hasDetailPage: true,
     context:
-      "The PROBE Lab at Brown University developed a novel PPG (photoplethysmography) sensor designed to maintain signal accuracy across varying melanin levels — addressing a well-documented disparity in pulse oximeter accuracy across skin tones. For clinical testing on Brown students, the sensor needed a wearable form factor that could be used reliably in outpatient monitoring applications.",
+      "The PROBE Lab at Brown University developed a novel PPG (photoplethysmography) sensor engineered to maintain signal accuracy across varying melanin levels — addressing a well-documented disparity in pulse oximeter performance across skin tones. The sensor requires a consistent, controlled contact pressure between 30–60 mmHg for accurate readings, and needed a wearable enclosure for outpatient clinical testing on Brown University students.",
     problem:
-      "The original PROBE Lab enclosure was bulky, uncomfortable, and difficult to use. It used a dual-enclosure form factor — a separate housing for the sensor region and for the PCB 'ears' — which resulted in uneven contact pressure, excessive bulk, and increased risk of PCB stress between enclosures. The form factor made consistent sensor-to-skin contact difficult to achieve.",
+      "The original PROBE Lab enclosure was a single housing with the PCB fully expanded, requiring the top and bottom to be screwed together to secure the board. This resulted in a large, cumbersome form factor that was uncomfortable to wear and time-consuming to set up. Our approach was to fold the PCB to recover surface area — but this introduced new design challenges around housing the folded board, stabilizing it under contact pressure, and managing wire routing.",
     role:
-      "As design engineer on the ENGN 0620 team, I led CAD design and prototyping iterations, from initial concept sketches through 3D-printed final prototypes. Prototypes were printed in collaboration with team members Anika and Mira.",
+      "Design engineer on the ENGN 0620 team alongside Mira Bhandari and Anika Sinha. Led CAD design and prototyping iterations from concept through 3D-printed final prototypes. Conducted user research via affinity mapping, applied decision matrices to select the form factor, and collaborated on physical prototyping and validation testing with the PROBE Lab.",
     designProcess: [
       {
-        title: "Initial Sketches",
+        title: "User Research — Affinity Mapping",
         description:
-          "Explored both watch-style and cuff-style encapsulations using a folded PCB architecture to reduce device footprint. Early concepts investigated weighted internal attachments for PCB stabilization before transitioning to a support rod approach.",
+          "Synthesized user pain points from interviews into an affinity map, then ranked them by difficulty and importance. The highest-priority issues were: inability to adjust or correct placement during use, lack of visual/tactile feedback on correct usage, and difficulty achieving consistent sensor-to-skin contact.",
       },
       {
-        title: "Prototype 1 — Low Fidelity",
+        title: "Form Factor Selection — Weighted Decision Matrix",
         description:
-          "Cardboard mockups based on initial sketches, exploring watch and cuff-style form factors. Focused on placement, comfort, and attachment mechanisms.",
+          "Evaluated four candidate form factors — watch, cuff, ring, and glove — across criteria including comfort, ease of use, contact pressure consistency, durability, and adaptability to different users. The watch form factor scored highest at 4.42, driven by its superior comfort and ease-of-use ratings. Cuff scored second at 3.86.",
       },
       {
-        title: "Prototype 2 — Resin Printed",
+        title: "Prototype 1 — Low Fidelity (Cardboard)",
         description:
-          "Selected the watch-style direction as a team and developed a dual-encapsulation design for unfolded PCB 'ears' using CAD and resin printing. The design introduced excessive bulk, imprecise fabrication, and increased risk of PCB stress between enclosures.",
+          "Built cardboard mockups exploring watch and cuff form factors with the folded PCB architecture. Focused on placement, comfort, and how a folded board could meaningfully reduce the device's footprint relative to the original screw-together design.",
       },
       {
-        title: "Prototype 3 — 3D Printed (CAD Iteration 3)",
+        title: "Prototype 2 — Medium Fidelity (Resin, Dual-Enclosure)",
         description:
-          "Revised into a single enclosure with folded PCB integration, internal extrusions, and a battery compartment. Incorrect battery measurements and unnecessary material usage meant further bulk reduction was needed for the final prototype.",
+          "Developed a resin-printed watch-style design using a dual-enclosure approach — separate housings for the sensor region and the PCB ears. Testing revealed imprecise fabrication tolerances, excessive bulk, and risk of PCB stress at the junction between enclosures.",
       },
       {
-        title: "Final CAD Model",
+        title: "Prototype 3 — High Fidelity (PLA, Single Enclosure)",
         description:
-          "Refined through PROBE Lab testing: improved wire routing, watch strap attachment, and extrusion geometry for better PCB stability and contact pressure. Snap-fit hinge with interlocking ball joints for secure assembly; cantilever closure for tool-free operation.",
+          "Refined into a single PLA enclosure that integrates the folded PCB with internal extrusions for board support and a battery compartment. Identified issues with incorrect battery measurements and excess material; users preferred the silicone skin contact pad over PDMS and watch strap over rope.",
+      },
+      {
+        title: "Final Design — Refined CAD",
+        description:
+          "Refined based on PROBE Lab validation: improved wire routing, corrected extrusion geometry for more consistent contact pressure, and added integrated watch strap attachment openings. Snap-fit hinge with interlocking ball joints enables secure assembly; cantilever snap-fit closure allows tool-free operation.",
       },
     ],
     finalDesign: [
-      "Single-enclosure watch-style form factor constrained to sensor footprint — ~30% of the original surface area.",
-      "Snap-fit hinge mechanism with interlocking ball joints for secure assembly and smooth movement, with integrated watch strap attachment openings.",
-      "Cantilever snap-fit closure integrated into the main housing for tool-free assembly and improved durability.",
-      "Internal extrusions designed around PCB dimensions to maintain consistent contact pressure through a silicone layer while preserving battery wire clearance.",
+      "Single PLA enclosure constrained to the sensor footprint — significantly reduced bulk compared to the dual-enclosure original.",
+      "Snap-fit hinge with interlocking ball joints for secure, repeatable assembly and smooth movement, with integrated watch strap attachment openings.",
+      "Cantilever snap-fit closure for tool-free assembly and improved durability over repeated use.",
+      "Internal extrusions sized to PCB dimensions, maintaining consistent contact pressure through a silicone skin-contact layer while preserving wire clearance.",
+      "Silicone pad (preferred over PDMS in user testing) and standard watch strap (preferred over rope) for improved comfort and wearability.",
     ],
     results: [
-      { metric: "43.94 mmHg", detail: "Contact pressure — within the clinically validated PPG sensing range" },
-      { metric: "7:28 → 4:37", detail: "Signal acquisition time improvement, producing clearer and more stable waveforms" },
-      { metric: "~30%", detail: "Of original surface area — significant reduction in enclosure bulk" },
-      { metric: "~40%", detail: "Improvement in signal acquisition speed vs. the original design" },
+      { metric: "55.0 mmHg", detail: "Mean contact pressure — within the clinically required 30–60 mmHg range for PPG sensing" },
+      { metric: "7:28 → 4:37", detail: "Signal acquisition time — cleaner waveforms achieved ~40% faster than the original design" },
+      { metric: "Improved morphology", detail: "Waveform quality improved: clearer systolic peaks, dicrotic notch, and diastolic peaks in final prototype" },
+      { metric: "Single enclosure", detail: "Eliminated dual-enclosure PCB stress risk; assembly reduced to a single snap-fit mechanism" },
     ],
     nextSteps: [
-      "Refine battery enclosure geometry and integration.",
-      "Improve durability of repeated PCB folding.",
-      "Optimize long-term wearability and strap comfort.",
+      "Refine battery enclosure geometry and reduce unnecessary housing material.",
+      "Test durability of snap-fit hinge under repeated assembly cycles.",
+      "Validate contact pressure consistency across a wider range of wrist sizes.",
+      "Explore further miniaturization as PCB design evolves.",
     ],
     portfolioPdf: "/pdfs/portfolio-ppg.pdf",
   },
@@ -103,7 +110,12 @@ export const projects: Project[] = [
     org: "CERN",
     summary:
       "Tested advanced silicon detector modules for the CMS HGCAL upgrade at CERN's silicon testing clean room, and documented testing procedures for the Future Circular Collider.",
-    hasDetailPage: false,
+    hasDetailPage: true,
+    context:
+      "The High Granularity Calorimeter (HGCAL) is a major upgrade to the CMS experiment at the Large Hadron Collider, designed to handle the extreme radiation and particle flux of the High-Luminosity LHC era. Silicon sensors are a core component, and each must be rigorously characterized before integration — assessed against stringent requirements across the full workflow from unpacking and preparation through final acceptance testing.",
+    role:
+      "Performed clean-room testing of silicon sensors at CERN, executing established testing protocols, operating specialized instrumentation, and analyzing results. As a culminating deliverable, wrote a technical document detailing the full clean-room testing procedures — intended to standardize practices for future sensor characterization at Brown University and to support sensor development for the Future Circular Collider (FCC).",
+    portfolioPdf: "/pdfs/silicon-sensor-testing.pdf",
   },
   {
     slug: "lgad-research",

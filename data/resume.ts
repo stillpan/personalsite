@@ -22,6 +22,16 @@ export const education = {
 
 export const workExperience: WorkExperience[] = [
   {
+    org: "Brown University Department of Physics",
+    location: "Providence, RI",
+    role: "Student Researcher",
+    period: "Dec 2024 – Present",
+    bullets: [
+      "Designing and programming PCBs using KiCad to test the data readout system at CERN, under Prof. Loukas Gouskos.",
+      "Received a UTRA award to characterize low-gain avalanche diodes (LGADs) — current and capacitance under varying voltages — and developed signal-sharing algorithms across channels via LabVIEW, under Prof. Jennifer Roloff.",
+    ],
+  },
+  {
     org: "CERN",
     location: "Geneva, Switzerland",
     role: "Student Researcher",
@@ -30,16 +40,6 @@ export const workExperience: WorkExperience[] = [
       "Collaborated on the development of advanced silicon detectors for the HGCAL upgrade in the CMS experiment.",
       "Tested advanced modules at CERN's silicon testing clean room, including performance evaluation and data analysis.",
       "Wrote a document on the testing procedure for silicon sensors to be used for the proposed Future Circular Collider.",
-    ],
-  },
-  {
-    org: "Brown University Department of Physics",
-    location: "Providence, RI",
-    role: "Student Researcher",
-    period: "Dec 2024 – Present",
-    bullets: [
-      "Designing and programming PCBs using KiCad to test the data readout system at CERN, under Prof. Loukas Gouskos.",
-      "Received a UTRA award to characterize low-gain avalanche diodes (LGADs) — current and capacitance under varying voltages — and developed signal-sharing algorithms across channels via LabVIEW, under Prof. Jennifer Roloff.",
     ],
   },
   {
